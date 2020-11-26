@@ -21,7 +21,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
     private val dao = TransacaoDAO()
     private val transacoes = dao.transacoes
-    private val viewDaActivity by lazy {
+    private val viewDaActivity by lazy {//lazy:não vamos iniciar a variável aqui, que seria obrigatório, mas somente quando for preciso
         window.decorView
     }
     private val viewGroupDaActivity by lazy {
@@ -50,10 +50,14 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
     private fun chamaDialogDeAdicao(tipo: Tipo) {
         AdicionaTransacaoDialog(viewGroupDaActivity, this)
-                .chama(tipo) { transacaoCriada ->
+                .chama(tipo, { transacaoCriada -> /*aqui chamamos uma high order function: ela é executada e lá dentro, ao
+                chamar o delegate, nome que demos a função dentro da função, ele devolve para cá, para quem chamou a HOF,
+                nossa expressão lambda, a transação criada. Ou seja, quem executou a expressão lambda, é delegado,
+                 responsabilizado, a tratar o dado recebido
+                */
                     adiciona(transacaoCriada)
                     lista_transacoes_adiciona_menu.close(true)
-                }
+                })
 
     }
 
